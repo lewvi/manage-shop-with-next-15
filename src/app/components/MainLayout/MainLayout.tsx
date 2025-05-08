@@ -1,6 +1,6 @@
 "use client";
 
-import { Layout } from "antd";
+import { Layout, Typography } from "antd";
 import React, { ReactNode } from "react";
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
@@ -31,8 +31,15 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
       <Layout>
         <Layout.Header
           style={{ background: "white", borderBottom: "1px solid #dcdce2" }}
-          className=" shadow-2xl"
-        ></Layout.Header>
+          className="shadow-2xl"
+        >
+          <Typography.Text className="!text-red-300">
+            11111111111111
+          </Typography.Text>
+          <Typography.Text className="text-red-300">
+            11111111111111
+          </Typography.Text>
+        </Layout.Header>
         <Layout.Content className="p-5 bg-white">{children}</Layout.Content>
       </Layout>
     </Layout>
