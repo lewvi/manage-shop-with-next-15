@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ReactNode } from "react";
 import QueryClientProviders from "@/provider/QueryClientProviders";
-import MainLayout from "./components/MainLayout/MainLayout";
+import MainLayout from "../components/MainLayout/MainLayout";
 import AntProviders from "@/provider/AntProviders";
 
 export const metadata: Metadata = {

@@ -18,6 +18,19 @@ const AntProviders = ({ children }: { children: ReactNode }) => {
       theme={{
         token: {
           fontFamily: kanit.style.fontFamily,
+          colorPrimary: "#292929",
+        },
+        components: {
+          Layout: {
+            bodyBg: "#fff",
+            headerBg: "transparent",
+            siderBg: "#f1f1f1",
+            triggerBg: "#f1f1f1",
+            triggerColor: "#292929",
+          },
+          Button: {
+            primaryShadow: "none",
+          },
         },
       }}
     >
