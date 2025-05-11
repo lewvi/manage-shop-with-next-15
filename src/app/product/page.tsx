@@ -15,37 +15,47 @@ import {
   Typography,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import CustomModal from "../../components/Common/Modal/CustomModal";
 import { isEmpty } from "lodash";
 import { formatNumberDigit } from "@/utils/formatNumberDigit";
+import {
+  useGetProductInformation,
+  useGetProductList,
+  useUpdateProduct,
+} from "@/service/product";
+import ButtonUpdateData from "@/components/Common/Button/ButtonUpdateData";
 
 interface IModalFormProduct {
+  data?: IProduct;
   open: boolean;
   onCanCel: () => void;
 }
 
-const data = [
-  {
-    product_code: "1",
-    product_name: "Coffee",
-    product_price: 0,
-    product_status: true,
-    product_description: "",
-  },
-  {
-    product_code: "2",
-    product_name: "",
-    product_price: 0,
-    product_status: false,
-    product_description: "",
-  },
-];
+// const data = [
+//   {
+//     product_code: "1",
+//     product_name: "Coffee",
+//     product_price: 0,
+//     product_status: true,
+//     product_description: "",
+//   },
+//   {
+//     product_code: "2",
+//     product_name: "",
+//     product_price: 0,
+//     product_status: false,
+//     product_description: "",
+//   },
+// ];
 
 const ModalFormProduct = (props: IModalFormProduct) => {
-  const { open, onCanCel } = props;
+  const { data, open, onCanCel } = props;
 
   const [form] = Form.useForm();
+
+  const mutateUpdate = useUpdateProduct();
+  const queryProductList = useGetProductList();
 
   const onSubmit = () => {
     form
@@ -53,7 +63,20 @@ const ModalFormProduct = (props: IModalFormProduct) => {
       ?.then((val) => {
         if (val == null || isEmpty(val)) return;
 
-        console.log(val);
+        const params: IUpdateProductParams = {
+          ...val,
+          product_description: val?.product_description || "",
+        };
+
+        mutateUpdate.mutate(params, {
+          onSuccess: () => {
+            queryProductList.refetch();
+            onCloseModal();
+          },
+          onError: ({ message: msg }) => {
+            //
+          },
+        });
       })
       .catch(() => {});
   };
@@ -62,6 +85,13 @@ const ModalFormProduct = (props: IModalFormProduct) => {
     form?.resetFields();
     onCanCel();
   };
+
+  useEffect(() => {
+    if (data != null || isEmpty(data) === false) {
+      form?.setFieldsValue({ ...data });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <CustomModal
@@ -129,16 +159,22 @@ const ModalFormProduct = (props: IModalFormProduct) => {
 };
 
 const Page = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState<string>();
+
   const [open, setOpen] = useState(false);
+  const [dataInfo, setDataInfo] = useState<IProduct | undefined>();
+
+  const queryProductList = useGetProductList();
+
+  const mutateInfo = useGetProductInformation();
 
   const filterDataList = useMemo(() => {
-    if (data == null || data?.length === 0) return [];
+    if (queryProductList.data == null) return [];
 
     if (search != null) {
       const searchLower = search?.toLowerCase();
 
-      return data?.filter((e) => {
+      return queryProductList.data?.filter((e) => {
         return (
           e?.product_code?.toLowerCase()?.includes(searchLower) ||
           e?.product_name?.toLowerCase()?.includes(searchLower)
@@ -146,27 +182,52 @@ const Page = () => {
       });
     }
 
-    return data;
-  }, [search]);
+    return queryProductList.data;
+  }, [search, queryProductList.data]);
 
   const handleToggleModal = () => {
     setOpen(!open);
   };
 
-  const onEdit = () => {
-    handleToggleModal();
+  const onEdit = (rc: IProduct) => {
+    if (rc == null || isEmpty(rc)) return;
+
+    mutateInfo.mutate(
+      { product_code: "" },
+      {
+        onSuccess: (val) => {
+          setDataInfo(val);
+          handleToggleModal();
+        },
+        onError: ({ message: msg }) => {
+          //
+        },
+      }
+    );
   };
 
-  const onDelete = () => {
+  const onDelete = (rc: IProduct) => {
     //
   };
 
-  const columns: ColumnsType = [
+  useEffect(() => {
+    if (open === false) {
+      setDataInfo(undefined);
+    }
+  }, [open]);
+
+  const columns: ColumnsType<IProduct> = [
     {
       key: "product_code",
       title: "Product Code",
+      align: "center",
+      width: 200,
       render: (_, rc) => {
-        return <Typography.Text>{rc?.product_code || "N/A"}</Typography.Text>;
+        return (
+          <Typography.Text className="text-sky-500">
+            {rc?.product_code || "N/A"}
+          </Typography.Text>
+        );
       },
     },
     {
@@ -217,13 +278,13 @@ const Page = () => {
             <Button
               type="text"
               icon={<EditOutlined />}
-              onClick={() => onEdit()}
+              onClick={() => onEdit(rc)}
             />
             <Button
               type="text"
               danger
               icon={<DeleteOutlined />}
-              onClick={() => onDelete()}
+              onClick={() => onDelete(rc)}
             />
           </Flex>
         );
@@ -232,12 +293,7 @@ const Page = () => {
   ];
 
   return (
-    <Row gutter={[16, 16]} justify="end" align="middle">
-      <Col xl={{ span: 12 }} md={{ span: 8 }} xs={{ span: 24 }}>
-        <Typography.Text className="text-base font-semibold">
-          Product List
-        </Typography.Text>
-      </Col>
+    <Row gutter={[12, 12]} justify="end" align="middle">
       <Col xl={{ span: 8 }} md={{ span: 10 }} xs={{ span: 24 }}>
         <Input
           placeholder="Search..."
@@ -249,11 +305,15 @@ const Page = () => {
           Create Product
         </Button>
       </Col>
+      <Col span={24} className="flex justify-end items-center">
+        <ButtonUpdateData onReFetch={() => queryProductList.refetch()} />
+      </Col>
       <Col span={24}>
         <Table
           rowKey="product_code"
           columns={columns}
           dataSource={filterDataList || []}
+          loading={queryProductList.loading}
           size="middle"
           scroll={{ x: "max-content" }}
           pagination={{
@@ -262,7 +322,11 @@ const Page = () => {
           }}
         />
       </Col>
-      <ModalFormProduct open={open} onCanCel={handleToggleModal} />
+      <ModalFormProduct
+        data={dataInfo}
+        open={open}
+        onCanCel={handleToggleModal}
+      />
     </Row>
   );
 };
