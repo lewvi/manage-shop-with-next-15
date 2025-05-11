@@ -1,12 +1,18 @@
 import React from "react";
-import { PieChartOutlined } from "@ant-design/icons";
+import { ShopOutlined, ShoppingOutlined } from "@ant-design/icons";
 
 const menu = [
   {
     key: "product",
     label: "Product",
     path: "/product",
-    icon: <PieChartOutlined />,
+    icon: <ShoppingOutlined />,
+  },
+  {
+    key: "shop",
+    label: "Shop",
+    path: "/shop",
+    icon: <ShopOutlined />,
   },
 ];
 

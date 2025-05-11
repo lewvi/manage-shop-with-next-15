@@ -22,14 +22,21 @@ const AntProviders = ({ children }: { children: ReactNode }) => {
         },
         components: {
           Layout: {
-            bodyBg: "#fff",
+            bodyBg: "#f1f1f1",
             headerBg: "transparent",
-            siderBg: "#f1f1f1",
-            triggerBg: "#f1f1f1",
+            siderBg: "#fff",
+            triggerBg: "#fff",
             triggerColor: "#292929",
           },
           Button: {
             primaryShadow: "none",
+          },
+          Menu: {
+            darkItemBg: "transparent",
+            darkItemColor: "#696969",
+            darkItemHoverColor: "#292929",
+            iconSize: 16,
+            itemBorderRadius: 10,
           },
         },
       }}

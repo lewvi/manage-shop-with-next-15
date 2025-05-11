@@ -9,7 +9,7 @@ import styled from "styled-components";
 // rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 
 const CardStyle = styled(Card)<{ $isShadow: boolean }>`
-  border-radius: 25px;
+  border-radius: 15px;
   box-shadow: ${({ $isShadow }) =>
     $isShadow
       ? "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px"
@@ -18,7 +18,6 @@ const CardStyle = styled(Card)<{ $isShadow: boolean }>`
 
 interface CustomCardProps extends CardProps {
   isShadow?: boolean;
-  // style?: React.CSSProperties;
 }
 
 const CustomCard: React.FC<CustomCardProps> = (props) => {
