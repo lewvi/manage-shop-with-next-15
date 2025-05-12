@@ -1,3 +1,5 @@
+"use client";
+
 import { BellOutlined } from "@ant-design/icons";
 import { Button, Col, Flex, Layout, Row, Typography } from "antd";
 import React from "react";

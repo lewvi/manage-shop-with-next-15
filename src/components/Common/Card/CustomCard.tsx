@@ -20,8 +20,10 @@ interface CustomCardProps extends CardProps {
   isShadow?: boolean;
 }
 
-const CustomCard: React.FC<CustomCardProps> = (props) => {
-  return <CardStyle {...props} $isShadow={props?.isShadow ?? true} />;
+const CustomCard: React.FC<CustomCardProps> = (props: CustomCardProps) => {
+  const { isShadow = true } = props;
+
+  return <CardStyle {...props} $isShadow={isShadow} />;
 };
 
 export default CustomCard;

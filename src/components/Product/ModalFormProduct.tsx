@@ -1,3 +1,5 @@
+"use client";
+
 import { Col, Form, Input, InputNumber, message, Row, Switch } from "antd";
 import React, { useEffect } from "react";
 import CustomModal from "../../components/Common/Modal/CustomModal";

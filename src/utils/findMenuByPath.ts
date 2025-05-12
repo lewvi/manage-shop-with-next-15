@@ -1,4 +1,4 @@
-export const findMenuByPath = (path: string, menus: any[]): any => {
+export function findMenuByPath(path: string, menus: any[]): any {
   for (let index = 0; index < menus.length; index++) {
     const menu = menus[index];
 
@@ -12,4 +12,4 @@ export const findMenuByPath = (path: string, menus: any[]): any => {
       }
     }
   }
-};
+}

@@ -1,5 +1,9 @@
 import React from "react";
-import { ShopOutlined, ShoppingOutlined } from "@ant-design/icons";
+import {
+  EnvironmentOutlined,
+  ShopOutlined,
+  ShoppingOutlined,
+} from "@ant-design/icons";
 
 const menu = [
   {
@@ -13,6 +17,12 @@ const menu = [
     label: "Manage Shop",
     path: "/shop",
     icon: <ShopOutlined />,
+  },
+  {
+    key: "overview",
+    label: "Overview",
+    path: "/overview",
+    icon: <EnvironmentOutlined />,
   },
 ];
 

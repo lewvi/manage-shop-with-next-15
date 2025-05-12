@@ -1,3 +1,5 @@
+"use client";
+
 import { Col, Row, Typography } from "antd";
 import React from "react";
 import { formatNumberDigit } from "@/utils/formatNumberDigit";

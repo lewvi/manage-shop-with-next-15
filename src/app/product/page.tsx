@@ -5,16 +5,7 @@ import ProductTable from "@/components/Product/ProductTable";
 import { Col, Row } from "antd";
 
 const Page = () => {
-  return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <ProductDashboard />
-      </Col>
-      <Col span={24}>
-        <ProductTable />
-      </Col>
-    </Row>
-  );
+  return <ProductTable />;
 };
 
 export default Page;

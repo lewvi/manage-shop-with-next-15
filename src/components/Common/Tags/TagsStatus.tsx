@@ -1,3 +1,5 @@
+"use client";
+
 import { getStatusColor } from "@/utils/getStatusColor";
 import { Tag } from "antd";
 import React from "react";

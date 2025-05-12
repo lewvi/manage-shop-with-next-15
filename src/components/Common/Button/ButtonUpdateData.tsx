@@ -1,3 +1,5 @@
+"use client";
+
 import { ReloadOutlined } from "@ant-design/icons";
 import { Button, Flex, Typography } from "antd";
 import dayjs, { Dayjs } from "dayjs";
