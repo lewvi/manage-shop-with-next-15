@@ -3,43 +3,60 @@ import {
   EditOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Flex, Input, Row, Table, Tag, Typography } from "antd";
+import {
+  Button,
+  Col,
+  Flex,
+  Input,
+  message,
+  Popconfirm,
+  Row,
+  Table,
+  Typography,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useMemo, useState } from "react";
 import { isEmpty } from "lodash";
 import { formatNumberDigit } from "@/utils/formatNumberDigit";
-import { useGetProductInformation, useGetProductList } from "@/service/product";
 import ButtonUpdateData from "@/components/Common/Button/ButtonUpdateData";
 import CustomCard from "@/components/Common/Card/CustomCard";
 import ModalFormProduct from "@/components/Product/ModalFormProduct";
 import TagsStatus from "@/components/Common/Tags/TagsStatus";
+import {
+  useDeleteProduct,
+  useProductInformation,
+  useProductList,
+} from "@/service/product";
 
-const data = [
-  {
-    product_code: "1",
-    product_name: "Coffee",
-    product_price: 0,
-    product_status: true,
-    product_description: "",
-  },
-  {
-    product_code: "2",
-    product_name: "",
-    product_price: 0,
-    product_status: false,
-    product_description: "",
-  },
-];
+// const data = [
+//   {
+//     product_code: "1",
+//     product_name: "Coffee",
+//     product_price: 0,
+//     product_status: true,
+//     product_description: "",
+//   },
+//   {
+//     product_code: "2",
+//     product_name: "",
+//     product_price: 0,
+//     product_status: false,
+//     product_description: "",
+//   },
+// ];
 
 const ProductTable = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [search, setSearch] = useState<string>();
 
   const [open, setOpen] = useState(false);
   const [dataInfo, setDataInfo] = useState<IProduct | undefined>();
 
-  const queryProductList = useGetProductList();
+  const queryProductList = useProductList();
 
-  const mutateInfo = useGetProductInformation();
+  const mutateInfo = useProductInformation();
+  const mutateDelete = useDeleteProduct();
 
   const filterDataList = useMemo(() => {
     if (queryProductList.data == null) return [];
@@ -66,21 +83,34 @@ const ProductTable = () => {
     if (rc == null || isEmpty(rc)) return;
 
     mutateInfo.mutate(
-      { product_code: "" },
+      { product_code: rc?.product_code },
       {
         onSuccess: (val) => {
           setDataInfo(val);
           handleToggleModal();
         },
         onError: ({ message: msg }) => {
-          //
+          messageApi.error(msg);
         },
       }
     );
   };
 
   const onDelete = (rc: IProduct) => {
-    //
+    if (rc == null || isEmpty(rc)) return;
+
+    mutateDelete.mutate(
+      { product_code: rc?.product_code },
+      {
+        onSuccess: () => {
+          messageApi.success("Delete Product Success");
+          queryProductList.refetch();
+        },
+        onError: ({ message: msg }) => {
+          messageApi.error(msg);
+        },
+      }
+    );
   };
 
   useEffect(() => {
@@ -147,12 +177,14 @@ const ProductTable = () => {
               icon={<EditOutlined />}
               onClick={() => onEdit(rc)}
             />
-            <Button
-              type="text"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() => onDelete(rc)}
-            />
+            <Popconfirm
+              title="Are you sure?"
+              description="This action cannot be undone"
+              placement="bottomLeft"
+              onConfirm={() => onDelete(rc)}
+            >
+              <Button type="text" danger icon={<DeleteOutlined />} />
+            </Popconfirm>
           </Flex>
         );
       },
@@ -161,6 +193,7 @@ const ProductTable = () => {
 
   return (
     <CustomCard>
+      {contextHolder}
       <Row gutter={[12, 12]} justify="end" align="middle">
         <Col span={24} className="flex justify-end items-center">
           <ButtonUpdateData onReFetch={() => queryProductList.refetch()} />
@@ -187,7 +220,6 @@ const ProductTable = () => {
             rowKey="product_code"
             columns={columns}
             dataSource={filterDataList || []}
-            // dataSource={data || []}
             loading={queryProductList.loading}
             size="middle"
             scroll={{ x: "max-content" }}

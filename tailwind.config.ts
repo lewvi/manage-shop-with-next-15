@@ -15,6 +15,7 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         "accent-content": "#A0A1A3",
+        "red-brown": "#D4625C",
       },
     },
   },

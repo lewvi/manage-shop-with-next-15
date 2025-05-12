@@ -1,8 +1,12 @@
-import { Col, Form, Input, InputNumber, Row, Switch } from "antd";
+import { Col, Form, Input, InputNumber, message, Row, Switch } from "antd";
 import React, { useEffect } from "react";
 import CustomModal from "../../components/Common/Modal/CustomModal";
 import { isEmpty } from "lodash";
-import { useGetProductList, useUpdateProduct } from "@/service/product";
+import {
+  useCreateProduct,
+  useProductList,
+  useUpdateProduct,
+} from "@/service/product";
 
 interface IModalFormProduct {
   data?: IProduct;
@@ -13,10 +17,14 @@ interface IModalFormProduct {
 const ModalFormProduct = (props: IModalFormProduct) => {
   const { data, open, onCanCel } = props;
 
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [form] = Form.useForm();
 
+  const queryProductList = useProductList();
+
+  const mutateCreate = useCreateProduct();
   const mutateUpdate = useUpdateProduct();
-  const queryProductList = useGetProductList();
 
   const onSubmit = () => {
     form
@@ -24,20 +32,35 @@ const ModalFormProduct = (props: IModalFormProduct) => {
       ?.then((val) => {
         if (val == null || isEmpty(val)) return;
 
-        const params: IUpdateProductParams = {
+        const params: IProductParams = {
           ...val,
+          product_status: val?.product_status ?? false,
           product_description: val?.product_description || "",
         };
 
-        mutateUpdate.mutate(params, {
-          onSuccess: () => {
-            queryProductList.refetch();
-            onCloseModal();
-          },
-          onError: ({ message: msg }) => {
-            //
-          },
-        });
+        if (data == null) {
+          mutateCreate.mutate(params, {
+            onSuccess: () => {
+              messageApi.success("Create Product Success");
+              queryProductList.refetch();
+              onCloseModal();
+            },
+            onError: ({ message: msg }) => {
+              messageApi.error(msg);
+            },
+          });
+        } else {
+          mutateUpdate.mutate(params, {
+            onSuccess: () => {
+              messageApi.success("Update Product Success");
+              queryProductList.refetch();
+              onCloseModal();
+            },
+            onError: ({ message: msg }) => {
+              messageApi.error(msg);
+            },
+          });
+        }
       })
       .catch(() => {});
   };
@@ -45,6 +68,13 @@ const ModalFormProduct = (props: IModalFormProduct) => {
   const onCloseModal = () => {
     form?.resetFields();
     onCanCel();
+  };
+
+  const validatorPrice = (_: unknown, val: any) => {
+    if (val == null || val <= 0) {
+      return Promise.reject("This value more than zero!!");
+    }
+    return Promise.resolve();
   };
 
   useEffect(() => {
@@ -60,8 +90,9 @@ const ModalFormProduct = (props: IModalFormProduct) => {
       onCancel={onCloseModal}
       onOk={onSubmit}
       righted
-      title="Create Product"
+      title={data == null ? "Create Product" : "Update Product"}
     >
+      {contextHolder}
       <Form form={form} layout="vertical">
         <Row gutter={[16, 0]}>
           <Col span={24}>
@@ -70,7 +101,7 @@ const ModalFormProduct = (props: IModalFormProduct) => {
               name="product_code"
               rules={[{ required: true }]}
             >
-              <Input placeholder="Product Code" />
+              <Input placeholder="Product Code" disabled={data != null} />
             </Form.Item>
           </Col>
           <Col xl={{ span: 12 }} md={{ span: 24 }} xs={{ span: 24 }}>
@@ -86,7 +117,7 @@ const ModalFormProduct = (props: IModalFormProduct) => {
             <Form.Item
               label="Product Price"
               name="product_price"
-              rules={[{ required: true }]}
+              rules={[{ required: true }, { validator: validatorPrice }]}
             >
               <InputNumber
                 placeholder="Product Price"

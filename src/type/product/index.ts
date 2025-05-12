@@ -6,7 +6,7 @@ interface IProduct {
   product_description: string;
 }
 
-interface IUpdateProductParams {
+interface IProductParams {
   product_code: string;
   product_name: string;
   product_price: number;

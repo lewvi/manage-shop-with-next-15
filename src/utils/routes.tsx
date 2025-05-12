@@ -4,13 +4,13 @@ import { ShopOutlined, ShoppingOutlined } from "@ant-design/icons";
 const menu = [
   {
     key: "product",
-    label: "Product",
+    label: "Manage Product",
     path: "/product",
     icon: <ShoppingOutlined />,
   },
   {
     key: "shop",
-    label: "Shop",
+    label: "Manage Shop",
     path: "/shop",
     icon: <ShopOutlined />,
   },

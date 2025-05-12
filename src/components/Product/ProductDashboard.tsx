@@ -2,21 +2,24 @@ import { Col, Row, Typography } from "antd";
 import React from "react";
 import { formatNumberDigit } from "@/utils/formatNumberDigit";
 import CustomCard from "../Common/Card/CustomCard";
+import { RiseOutlined } from "@ant-design/icons";
 
 const ProductCount = () => {
   return (
     <CustomCard isShadow={false}>
       <Row>
         <Col span={8} className="flex items-center">
-          {/* <RiseOutlined className="text-[45px] text-green-500" /> */}
+          {/* <div className="bg-[#EBF3E8] rounded-lg p-4">
+            <RiseOutlined className="text-[25px]" />
+          </div> */}
         </Col>
         <Col span={16}>
-          <Typography.Text className="font-semibold">
+          <Typography.Text className="font-semibold text-red-brown">
             Product Count
           </Typography.Text>
           <br />
           <Typography.Text className="text-[40px] font-semibold">
-            {formatNumberDigit(50, 0)}
+            {formatNumberDigit(0, 0)}
           </Typography.Text>
           <br />
           <Typography.Text className="text-xs text-accent-content">

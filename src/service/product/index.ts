@@ -1,15 +1,17 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { throwResponse } from "../connection/helper";
 import {
-  getProductList,
-  postProductInformation,
+  postCreateProduct,
+  postDeleteProduct,
+  postProductInfo,
+  postProductList,
   postUpdateProduct,
 } from "./api";
 
-export const useGetProductList = () => {
+export const useProductList = () => {
   const fetchData = async (): Promise<IProduct[] | undefined> => {
     try {
-      const { data } = await getProductList();
+      const { data } = await postProductList();
 
       return data;
     } catch (err: any) {
@@ -25,10 +27,12 @@ export const useGetProductList = () => {
   return { data, loading: isLoading || isFetching, error: isError, refetch };
 };
 
-export const useGetProductInformation = () => {
-  const fetchData = async (params: any): Promise<IProduct | undefined> => {
+export const useProductInformation = () => {
+  const fetchData = async (params: {
+    product_code: string;
+  }): Promise<IProduct | undefined> => {
     try {
-      const { data } = await postProductInformation(params);
+      const { data } = await postProductInfo(params);
 
       return data;
     } catch (err: any) {
@@ -37,14 +41,32 @@ export const useGetProductInformation = () => {
   };
 
   const { data, error, mutate, mutateAsync, reset } = useMutation({
-    mutationFn: (params: any) => fetchData(params),
+    mutationFn: (params: { product_code: string }) => fetchData(params),
+  });
+
+  return { data, error, mutate, mutateAsync, reset };
+};
+
+export const useCreateProduct = () => {
+  const fetchData = async (params: IProductParams) => {
+    try {
+      const { data } = await postCreateProduct(params);
+
+      return data;
+    } catch (err: any) {
+      throwResponse(err?.response?.data);
+    }
+  };
+
+  const { data, error, mutate, mutateAsync, reset } = useMutation({
+    mutationFn: (params: IProductParams) => fetchData(params),
   });
 
   return { data, error, mutate, mutateAsync, reset };
 };
 
 export const useUpdateProduct = () => {
-  const fetchData = async (params: IUpdateProductParams) => {
+  const fetchData = async (params: IProductParams) => {
     try {
       const { data } = await postUpdateProduct(params);
 
@@ -55,7 +77,27 @@ export const useUpdateProduct = () => {
   };
 
   const { data, error, mutate, mutateAsync, reset } = useMutation({
-    mutationFn: (params: IUpdateProductParams) => fetchData(params),
+    mutationFn: (params: IProductParams) => fetchData(params),
+  });
+
+  return { data, error, mutate, mutateAsync, reset };
+};
+
+export const useDeleteProduct = () => {
+  const fetchData = async (params: {
+    product_code: string;
+  }): Promise<IProduct | undefined> => {
+    try {
+      const { data } = await postDeleteProduct(params);
+
+      return data;
+    } catch (err: any) {
+      throwResponse(err?.response?.data);
+    }
+  };
+
+  const { data, error, mutate, mutateAsync, reset } = useMutation({
+    mutationFn: (params: { product_code: string }) => fetchData(params),
   });
 
   return { data, error, mutate, mutateAsync, reset };
