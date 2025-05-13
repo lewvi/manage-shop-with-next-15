@@ -15,6 +15,12 @@ const TagsStatus = (props: ITagsStatusProps) => {
     <Tag
       className="min-w-[85px] text-center rounded-xl capitalize"
       color={getStatusColor(status)}
+      // style={{
+      //   backgroundColor: `${getStatusColor(status)}1A`,
+      //   border: "none",
+      //   color: `${getStatusColor(status)}`,
+      // }}
+      // className="rounded-xl capitalize text-center min-w-[85px] font-semibold py-1"
     >
       {status || ""}
     </Tag>

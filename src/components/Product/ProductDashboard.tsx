@@ -4,24 +4,21 @@ import { Col, Progress, Row, Tag, Typography } from "antd";
 import React, { useEffect, useMemo } from "react";
 import { formatNumberDigit } from "@/utils/formatNumberDigit";
 import CustomCard from "../Common/Card/CustomCard";
-import { RiseOutlined } from "@ant-design/icons";
+import { BarChartOutlined, RiseOutlined } from "@ant-design/icons";
 import { getStatusColor } from "@/utils/getStatusColor";
 import {
   useProductCount,
   useProductList,
   useProductTopPrice,
 } from "@/service/product";
+import ColumnChart from "../Common/ApexCharts/ColumnChart";
 
-// const data = {
-//   product_count: 50,
-//   product_active: 30,
-//   product_inactive: 20,
-// };
+const colors = ["#444444", "#333333", "#222222", "#111111", "#000000"];
 
 const ProductActiveAndInactive = ({ data }: { data?: IProductCount }) => {
   return (
     <CustomCard isShadow={false} className="h-full">
-      <Row>
+      {/* <Row>
         <Col span={24}>
           <Typography.Text>Product Active</Typography.Text>
           <Progress
@@ -54,7 +51,7 @@ const ProductActiveAndInactive = ({ data }: { data?: IProductCount }) => {
             </Typography.Text>
           </div>
         </Col>
-      </Row>
+      </Row> */}
     </CustomCard>
   );
 };
@@ -62,12 +59,8 @@ const ProductActiveAndInactive = ({ data }: { data?: IProductCount }) => {
 const ProductCount = ({ count }: { count: number }) => {
   return (
     <CustomCard isShadow={false} className="h-full">
-      <Row align="middle">
-        <Col span={8} className="flex items-center">
-          {/* <div className="bg-[#EBF3E8] rounded-lg p-4">
-            <RiseOutlined className="text-[25px]" />
-          </div> */}
-        </Col>
+      {/* <Row align="middle">
+        <Col span={8} className="flex items-center"></Col>
         <Col span={16}>
           <Typography.Text className="font-semibold text-red-brown">
             Product Count
@@ -81,7 +74,7 @@ const ProductCount = ({ count }: { count: number }) => {
             Products
           </Typography.Text>
         </Col>
-      </Row>
+      </Row> */}
     </CustomCard>
   );
 };
@@ -91,8 +84,20 @@ const ProductDashboard = () => {
   const queryProductTop = useProductTopPrice();
   const queryProductList = useProductList();
 
+  const series = useMemo(() => {
+    return queryProductTop.data?.map((item, i) => {
+      return {
+        x: item?.product_name,
+        y: item?.product_price ?? 0,
+
+        fillColor: colors[i],
+      };
+    });
+  }, [queryProductTop.data]);
+
   useEffect(() => {
     queryCount.refetch();
+    queryProductTop.refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryProductList.data]);
 
@@ -105,7 +110,22 @@ const ProductDashboard = () => {
         <ProductActiveAndInactive data={queryCount.data} />
       </Col>
       <Col xl={{ span: 12 }} md={{ span: 24 }} xs={{ span: 24 }}>
-        <CustomCard isShadow={false} className="h-full"></CustomCard>
+        <CustomCard className="h-full" styles={{ body: { padding: 14 } }}>
+          <p className="font-semibold text-base px-3 flex items-center">
+            <BarChartOutlined className="mr-2" />
+            Product Top Price
+          </p>
+          <ColumnChart
+            height={250}
+            categories={[]}
+            series={[
+              {
+                name: "Product Price",
+                data: series,
+              },
+            ]}
+          />
+        </CustomCard>
       </Col>
     </Row>
   );
