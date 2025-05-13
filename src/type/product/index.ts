@@ -4,6 +4,7 @@ interface IProduct {
   product_price: number;
   product_status: boolean;
   product_description: string;
+  update_at?: string;
 }
 
 interface IProductParams {
@@ -12,4 +13,10 @@ interface IProductParams {
   product_price: number;
   product_status: boolean;
   product_description?: string;
+}
+
+interface IProductCount {
+  count: number;
+  active: number;
+  inactive: number;
 }

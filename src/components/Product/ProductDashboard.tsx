@@ -1,26 +1,31 @@
 "use client";
 
 import { Col, Progress, Row, Tag, Typography } from "antd";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { formatNumberDigit } from "@/utils/formatNumberDigit";
 import CustomCard from "../Common/Card/CustomCard";
 import { RiseOutlined } from "@ant-design/icons";
 import { getStatusColor } from "@/utils/getStatusColor";
+import {
+  useProductCount,
+  useProductList,
+  useProductTopPrice,
+} from "@/service/product";
 
-const data = {
-  product_count: 50,
-  product_active: 30,
-  product_inactive: 20,
-};
+// const data = {
+//   product_count: 50,
+//   product_active: 30,
+//   product_inactive: 20,
+// };
 
-const ProductActiveAndInactive = () => {
+const ProductActiveAndInactive = ({ data }: { data?: IProductCount }) => {
   return (
     <CustomCard isShadow={false} className="h-full">
       <Row>
         <Col span={24}>
           <Typography.Text>Product Active</Typography.Text>
           <Progress
-            percent={data?.product_active}
+            percent={data?.active}
             showInfo={false}
             strokeColor={getStatusColor("active")}
           />
@@ -29,14 +34,14 @@ const ProductActiveAndInactive = () => {
               Total
             </Typography.Text>
             <Typography.Text className="text-xs text-accent-content">
-              {`${data?.product_active ?? 0}/${data?.product_count ?? 0}`}
+              {`${data?.active ?? 0}/${data?.count ?? 0}`}
             </Typography.Text>
           </div>
         </Col>
         <Col span={24}>
           <Typography.Text>Product Inactive</Typography.Text>
           <Progress
-            percent={data?.product_inactive}
+            percent={data?.inactive}
             showInfo={false}
             strokeColor={getStatusColor("inactive")}
           />
@@ -45,7 +50,7 @@ const ProductActiveAndInactive = () => {
               Total
             </Typography.Text>
             <Typography.Text className="text-xs text-accent-content">
-              {`${data?.product_inactive ?? 0}/${data?.product_count ?? 0}`}
+              {`${data?.inactive ?? 0}/${data?.count ?? 0}`}
             </Typography.Text>
           </div>
         </Col>
@@ -54,7 +59,7 @@ const ProductActiveAndInactive = () => {
   );
 };
 
-const ProductCount = () => {
+const ProductCount = ({ count }: { count: number }) => {
   return (
     <CustomCard isShadow={false} className="h-full">
       <Row align="middle">
@@ -69,7 +74,7 @@ const ProductCount = () => {
           </Typography.Text>
           <br />
           <Typography.Text className="text-[40px] font-semibold">
-            {formatNumberDigit(data?.product_count ?? 0, 0)}
+            {formatNumberDigit(count ?? 0, 0)}
           </Typography.Text>
           <br />
           <Typography.Text className="text-xs text-accent-content">
@@ -82,13 +87,22 @@ const ProductCount = () => {
 };
 
 const ProductDashboard = () => {
+  const queryCount = useProductCount();
+  const queryProductTop = useProductTopPrice();
+  const queryProductList = useProductList();
+
+  useEffect(() => {
+    queryCount.refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryProductList.data]);
+
   return (
     <Row gutter={[12, 12]}>
       <Col xl={{ span: 6 }} md={{ span: 12 }} xs={{ span: 24 }}>
-        <ProductCount />
+        <ProductCount count={queryCount.data?.count ?? 0} />
       </Col>
       <Col xl={{ span: 6 }} md={{ span: 12 }} xs={{ span: 24 }}>
-        <ProductActiveAndInactive />
+        <ProductActiveAndInactive data={queryCount.data} />
       </Col>
       <Col xl={{ span: 12 }} md={{ span: 24 }} xs={{ span: 24 }}>
         <CustomCard isShadow={false} className="h-full"></CustomCard>

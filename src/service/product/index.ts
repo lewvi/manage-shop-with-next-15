@@ -1,6 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { throwResponse } from "../connection/helper";
 import {
+  getProductCount,
+  getProductTopPrice,
   postCreateProduct,
   postDeleteProduct,
   postProductInfo,
@@ -101,4 +103,42 @@ export const useDeleteProduct = () => {
   });
 
   return { data, error, mutate, mutateAsync, reset };
+};
+
+export const useProductCount = () => {
+  const fetchData = async (): Promise<IProductCount | undefined> => {
+    try {
+      const { data } = await getProductCount();
+
+      return data;
+    } catch (err: any) {
+      throwResponse(err?.response?.data);
+    }
+  };
+
+  const { data, isLoading, isFetching, isError, refetch } = useQuery({
+    queryKey: ["getProductCount"],
+    queryFn: () => fetchData(),
+  });
+
+  return { data, loading: isLoading || isFetching, error: isError, refetch };
+};
+
+export const useProductTopPrice = () => {
+  const fetchData = async (): Promise<IProduct[] | undefined> => {
+    try {
+      const { data } = await getProductTopPrice();
+
+      return data;
+    } catch (err: any) {
+      throwResponse(err?.response?.data);
+    }
+  };
+
+  const { data, isLoading, isFetching, isError, refetch } = useQuery({
+    queryKey: ["getProductTopPrice"],
+    queryFn: () => fetchData(),
+  });
+
+  return { data, loading: isLoading || isFetching, error: isError, refetch };
 };

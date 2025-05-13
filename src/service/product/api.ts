@@ -1,4 +1,4 @@
-import { fetchGetData, fetchPostData } from "../connection/helper";
+import { API_URL, fetchGetData, fetchPostData } from "../connection/helper";
 
 const ROUTE_NAME = {
   URL_PRODUCT: "/products",
@@ -6,7 +6,7 @@ const ROUTE_NAME = {
 
 export const postProductList = async () => {
   const res = await fetchPostData(
-    `http://localhost:3000${ROUTE_NAME.URL_PRODUCT}/product-list`,
+    `${API_URL}${ROUTE_NAME.URL_PRODUCT}/product-list`,
     {}
   );
 
@@ -15,7 +15,7 @@ export const postProductList = async () => {
 
 export const postProductInfo = async (params: { product_code: string }) => {
   const res = await fetchPostData(
-    `http://localhost:3000${ROUTE_NAME.URL_PRODUCT}/product-information`,
+    `${API_URL}${ROUTE_NAME.URL_PRODUCT}/product-information`,
     params || {}
   );
 
@@ -24,7 +24,7 @@ export const postProductInfo = async (params: { product_code: string }) => {
 
 export const postCreateProduct = async (params: IProductParams) => {
   const res = await fetchPostData(
-    `http://localhost:3000${ROUTE_NAME.URL_PRODUCT}/create-product`,
+    `${API_URL}${ROUTE_NAME.URL_PRODUCT}/create-product`,
     params || {}
   );
 
@@ -33,7 +33,7 @@ export const postCreateProduct = async (params: IProductParams) => {
 
 export const postUpdateProduct = async (params: IProductParams) => {
   const res = await fetchPostData(
-    `http://localhost:3000${ROUTE_NAME.URL_PRODUCT}/update-product`,
+    `${API_URL}${ROUTE_NAME.URL_PRODUCT}/update-product`,
     params || {}
   );
 
@@ -42,8 +42,26 @@ export const postUpdateProduct = async (params: IProductParams) => {
 
 export const postDeleteProduct = async (params: { product_code: string }) => {
   const res = await fetchPostData(
-    `http://localhost:3000${ROUTE_NAME.URL_PRODUCT}/delete-product`,
+    `${API_URL}${ROUTE_NAME.URL_PRODUCT}/delete-product`,
     params || {}
+  );
+
+  return res;
+};
+
+export const getProductCount = async () => {
+  const res = await fetchGetData(
+    `${API_URL}${ROUTE_NAME.URL_PRODUCT}/product-count`,
+    {}
+  );
+
+  return res;
+};
+
+export const getProductTopPrice = async () => {
+  const res = await fetchGetData(
+    `${API_URL}${ROUTE_NAME.URL_PRODUCT}/product-top-price`,
+    {}
   );
 
   return res;
