@@ -116,13 +116,14 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   }, [pathname]);
 
   return (
-    <Layout>
+    <Layout style={{ minHeight: "100vh", overflowX: "hidden" }}>
       <SideBarContent listMenu={menuList} selectedKey={selectedKey} />
       <Layout>
-        <Layout.Content style={{ minHeight: "100vh" }}>
-          <Header title={titleLabel} />
-          <div className="p-5">{children}</div>
-        </Layout.Content>
+        <Header title={titleLabel} />
+        <Layout.Content className="p-5">{children}</Layout.Content>
+        {/* <Layout.Footer className="p-3 bg-transparent flex justify-center items-center">
+          <p className="text-xs">Ant Design ©2025 Created by Ant UED</p>
+        </Layout.Footer> */}
       </Layout>
     </Layout>
   );

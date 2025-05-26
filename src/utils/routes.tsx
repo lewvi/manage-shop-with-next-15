@@ -19,9 +19,9 @@ const menu = [
     icon: <ShopOutlined />,
   },
   {
-    key: "overview",
-    label: "Overview",
-    path: "/overview",
+    key: "location",
+    label: "Location",
+    path: "/location",
     icon: <EnvironmentOutlined />,
   },
 ];
