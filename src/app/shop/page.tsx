@@ -1,91 +1,214 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import ButtonUpdateData from "@/components/Common/Button/ButtonUpdateData";
+import CustomCard from "@/components/Common/Card/CustomCard";
+import { ShopOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Col,
+  Drawer,
+  Flex,
+  Form,
+  Input,
+  message,
+  Row,
+  Select,
+  Switch,
+  Table,
+  Typography,
+} from "antd";
+import { ColumnsType } from "antd/es/table";
+import React, { useMemo, useState } from "react";
 
-interface VirtualScrollProps<T> {
-  data: T[];
-  rowHeight?: number; // pixel
-  containerHeight?: string; // CSS string e.g. "calc(100vh - 200px)"
-  overScan?: number;
-  renderRow: (item: T, index: number) => React.ReactNode;
+const colLayout = {
+  xl: { span: 24 },
+  md: { span: 24 },
+  xs: { span: 24 },
+};
+interface DrawerFormShopProp {
+  open: boolean;
+  onClose: () => void;
 }
 
-const VirtualScroll = <T,>(props: VirtualScrollProps<T>) => {
-  const {
-    data,
-    rowHeight = 40,
-    containerHeight = "600px",
-    overScan = 5,
-    renderRow,
-  } = props;
+const DrawerFormShop = (props: DrawerFormShopProp) => {
+  const { open, onClose } = props;
 
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const [startIndex, setStartIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(15);
-
-  const handleScroll = () => {
-    if (containerRef.current) {
-      const scrollTop = containerRef.current.scrollTop;
-      const newStart = Math.floor(scrollTop / rowHeight);
-      setStartIndex(newStart);
-    }
+  const onToggleDrawer = () => {
+    onClose();
   };
 
-  const endIndex = Math.min(startIndex + visibleCount, data.length);
-  const visibleItems = data.slice(startIndex, endIndex);
-
-  useEffect(() => {
-    if (containerRef.current) {
-      const containerHeightPx = containerRef.current.clientHeight;
-      const count = Math.ceil(containerHeightPx / rowHeight) + overScan;
-      setVisibleCount(count);
-    }
-  }, [rowHeight, overScan]);
-
   return (
-    <div
-      ref={containerRef}
-      onScroll={handleScroll}
-      style={{ height: containerHeight, overflowY: "scroll" }}
+    <Drawer
+      open={open}
+      onClose={onToggleDrawer}
+      title="Create Shop"
+      width="50vw"
+      maskClosable={false}
+      footer={
+        <Flex gap={8} className="flex justify-end py-2">
+          <Button className="min-w-[120px]" onClick={onToggleDrawer}>
+            Close
+          </Button>
+          <Button type="primary" className="min-w-[120px]">
+            Submit
+          </Button>
+        </Flex>
+      }
     >
-      <div style={{ height: data.length * rowHeight, position: "relative" }}>
-        {visibleItems.map((item, i) => {
-          const actualIndex = startIndex + i;
-          return (
-            <div
-              key={actualIndex}
-              style={{
-                position: "absolute",
-                top: actualIndex * rowHeight,
-                left: 0,
-                right: 0,
-                height: rowHeight,
-              }}
-            >
-              {renderRow(item, actualIndex)}
-            </div>
-          );
-        })}
-      </div>
-    </div>
+      <Form layout="vertical">
+        <Row>
+          <Col span={24}>
+            <Typography.Text className="font-semibold text-lg">
+              Personal
+            </Typography.Text>
+          </Col>
+          <Col {...colLayout}>
+            <Form.Item label="Shop ID" name="shop_id">
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col {...colLayout}>
+            <Form.Item label="Shop Name" name="shop_name">
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col {...colLayout}>
+            <Form.Item label="Status" name="status">
+              <Switch />
+            </Form.Item>
+          </Col>
+          <Col {...colLayout}>
+            <Form.Item label="Remark" name="remark">
+              <Input.TextArea autoSize={{ minRows: 5 }} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Typography.Text className="font-semibold text-lg">
+              Address
+            </Typography.Text>
+          </Col>
+          <Col {...colLayout}>
+            <Form.Item label="Address" name="address">
+              <Select />
+            </Form.Item>
+          </Col>
+          <Col {...colLayout}>
+            <Form.Item label="Address" name="address">
+              <Select />
+            </Form.Item>
+          </Col>
+          <Col {...colLayout}>
+            <Form.Item label="Address" name="address">
+              <Select />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+    </Drawer>
   );
 };
 
-const data = Array.from({ length: 10000 }, (_, i) => `แถวที่ ${i + 1}`);
-
 const Page = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const [search, setSearch] = useState<string>();
+  const [open, setOpen] = useState(false);
+
+  const filterDataList = useMemo(() => {
+    return [];
+  }, []);
+
+  const handleToggleModal = () => {
+    setOpen(!open);
+  };
+
+  const columns: ColumnsType = [
+    {
+      key: "shop_id",
+      title: "Shop ID",
+      render: (_, rc) => {
+        return <></>;
+      },
+    },
+    {
+      key: "shop_name",
+      title: "Shop Name",
+      render: (_, rc) => {
+        return <></>;
+      },
+    },
+    {
+      key: "status",
+      title: "Status",
+      align: "center",
+      render: (_, rc) => {
+        return <></>;
+      },
+    },
+    {
+      key: "edit",
+      title: "Edit",
+      width: 80,
+      align: "center",
+      fixed: "right",
+      render: (_, rc) => {
+        return <></>;
+      },
+    },
+    {
+      key: "delete",
+      title: "Delete",
+      width: 80,
+      align: "center",
+      fixed: "right",
+      render: (_, rc) => {
+        return <></>;
+      },
+    },
+  ];
+
   return (
-    <VirtualScroll
-      data={data}
-      rowHeight={40}
-      containerHeight="200px"
-      renderRow={(item, index) => (
-        <div className="px-4 py-2 border-b bg-white hover:bg-gray-50">
-          {item}
-        </div>
-      )}
-    />
+    <CustomCard>
+      {contextHolder}
+
+      <Row gutter={[12, 12]} justify="end" align="middle">
+        <Col span={24} className="flex justify-end items-center">
+          <ButtonUpdateData onReFetch={() => {}} />
+        </Col>
+        <Col xl={{ span: 12 }} md={{ span: 8 }} xs={{ span: 24 }}>
+          <ShopOutlined className="mr-2 text-base" />
+          <Typography.Text className="font-semibold text-base">
+            Shop List
+          </Typography.Text>
+        </Col>
+        <Col xl={{ span: 8 }} md={{ span: 10 }} xs={{ span: 24 }}>
+          <Input
+            placeholder="Search..."
+            onChange={(e) => setSearch(e?.target?.value)}
+          />
+        </Col>
+        <Col xl={{ span: 4 }} md={{ span: 6 }} xs={{ span: 24 }}>
+          <Button block type="primary" onClick={handleToggleModal}>
+            Create Shop
+          </Button>
+        </Col>
+        <Col span={24}>
+          <Table
+            rowKey="shop_id"
+            columns={columns}
+            dataSource={filterDataList || []}
+            scroll={{ x: "max-content" }}
+            pagination={{
+              size: "small",
+              showSizeChanger: true,
+            }}
+          />
+        </Col>
+      </Row>
+      <DrawerFormShop open={open} onClose={handleToggleModal} />
+    </CustomCard>
   );
 };
 

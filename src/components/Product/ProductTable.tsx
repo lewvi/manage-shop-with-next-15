@@ -30,23 +30,6 @@ import {
   useProductList,
 } from "@/service/product";
 
-// const data = [
-//   {
-//     product_code: "1",
-//     product_name: "Coffee",
-//     product_price: 0,
-//     product_status: true,
-//     product_description: "",
-//   },
-//   {
-//     product_code: "2",
-//     product_name: "",
-//     product_price: 0,
-//     product_status: false,
-//     product_description: "",
-//   },
-// ];
-
 const ProductTable = () => {
   const [messageApi, contextHolder] = message.useMessage();
 

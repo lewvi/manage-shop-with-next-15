@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Layout, Menu } from "antd";
+import { Drawer, Grid, Layout, Menu } from "antd";
 import React, {
   ReactNode,
   useCallback,
@@ -14,7 +14,6 @@ import Pages from "../../utils/routes";
 import { usePathname, useRouter } from "next/navigation";
 import { cloneDeep } from "lodash";
 import { findMenuByPath } from "@/utils/findMenuByPath";
-import { SettingOutlined } from "@ant-design/icons";
 
 const MenuWrapper = styled.div`
   .ant-menu-item {
@@ -30,6 +29,38 @@ interface ISideBarContent {
   listMenu: any[];
   selectedKey: string;
 }
+interface ISideBarMobile extends ISideBarContent {
+  open: boolean;
+  onClose: () => void;
+}
+
+const SideBarMobile = (props: ISideBarMobile) => {
+  const { open, onClose, listMenu, selectedKey } = props;
+
+  return (
+    <Drawer
+      open={open}
+      onClose={onClose}
+      placement="left"
+      width="80vw"
+      closable={false}
+    >
+      <div>
+        <div>
+          <div className="bg-[#292929] rounded-md h-[50px]" />
+        </div>
+        <MenuWrapper className="mt-5 h-[calc(100vh-200px)]">
+          <Menu
+            theme="dark"
+            mode="vertical"
+            items={listMenu}
+            selectedKeys={[selectedKey]}
+          />
+        </MenuWrapper>
+      </div>
+    </Drawer>
+  );
+};
 
 const SideBarContent = ({ listMenu, selectedKey }: ISideBarContent) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -40,9 +71,10 @@ const SideBarContent = ({ listMenu, selectedKey }: ISideBarContent) => {
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
       width="240px"
-      className="shadow-lg"
+      className="shadow-lg z-[1000]"
+      style={{ top: 0, position: "sticky" }}
     >
-      <div className="z-[1000]" style={{ top: 0, position: "sticky" }}>
+      <div>
         <div className="p-3">
           <div className="bg-[#292929] rounded-md h-[50px]" />
         </div>
@@ -63,8 +95,15 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const { xl } = Grid.useBreakpoint();
+
   const [titleLabel, setTitleLabel] = useState<string>("");
   const [selectedKey, setSelectedKey] = useState<string>("");
+  const [openMenuMobile, setOpenMenuMobile] = useState(false);
+
+  const handleToggleMenuMobile = () => {
+    setOpenMenuMobile(!openMenuMobile);
+  };
 
   const onClickMenu = (key: string, label: string, path: string) => {
     setSelectedKey(key);
@@ -116,14 +155,20 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   }, [pathname]);
 
   return (
-    <Layout style={{ minHeight: "100vh", overflowX: "hidden" }}>
-      <SideBarContent listMenu={menuList} selectedKey={selectedKey} />
+    <Layout style={{ height: "100vh", overflowX: "hidden" }}>
+      {xl ? (
+        <SideBarContent listMenu={menuList} selectedKey={selectedKey} />
+      ) : (
+        <SideBarMobile
+          open={openMenuMobile}
+          onClose={handleToggleMenuMobile}
+          listMenu={menuList}
+          selectedKey={selectedKey}
+        />
+      )}
       <Layout>
-        <Header title={titleLabel} />
+        <Header title={titleLabel} onToggleMenu={handleToggleMenuMobile} />
         <Layout.Content className="p-5">{children}</Layout.Content>
-        {/* <Layout.Footer className="p-3 bg-transparent flex justify-center items-center">
-          <p className="text-xs">Ant Design ©2025 Created by Ant UED</p>
-        </Layout.Footer> */}
       </Layout>
     </Layout>
   );
