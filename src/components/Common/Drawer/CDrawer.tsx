@@ -5,8 +5,8 @@ import React from "react";
 interface CustomDrawerProps extends DrawerProps {
   showFooter?: boolean;
   okText?: string;
-  cancelText ?: string
-  onSubmit: (e?: AnyObject) => void;
+  cancelText?: string;
+  onSubmit?: (e?: AnyObject) => void;
 }
 
 const CDrawer = (props: CustomDrawerProps) => {
@@ -19,7 +19,10 @@ const CDrawer = (props: CustomDrawerProps) => {
       footer={
         showFooter ? (
           <Flex gap={8} className="flex justify-end py-2">
-            <Button className="min-w-[120px]" onClick={onClose}>
+            <Button
+              className="min-w-[120px] text-primary border-primary"
+              onClick={onClose}
+            >
               Close
             </Button>
             <Button type="primary" className="min-w-[120px]" onClick={onSubmit}>

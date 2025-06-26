@@ -51,6 +51,7 @@ const ProductDashboard = () => {
               <RadialBarCharts
                 series={[queryCount.data?.count ?? 0]}
                 labels={["Total"]}
+                colors={["#232324"]}
                 height={300}
               />
             </Col>

@@ -2,149 +2,115 @@
 
 import ButtonUpdateData from "@/components/Common/Button/ButtonUpdateData";
 import CustomCard from "@/components/Common/Card/CustomCard";
-import { ShopOutlined } from "@ant-design/icons";
+import TagsStatus from "@/components/Common/Tags/TagsStatus";
+import DrawerFormShop from "@/components/Shop/DrawerFormShop";
+import { DeleteOutlined, EditOutlined, ShopOutlined } from "@ant-design/icons";
 import {
   Button,
   Col,
-  Drawer,
-  Flex,
-  Form,
   Input,
   message,
+  Popconfirm,
   Row,
-  Select,
-  Switch,
   Table,
   Typography,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-const colLayout = {
-  xl: { span: 24 },
-  md: { span: 24 },
-  xs: { span: 24 },
-};
-interface DrawerFormShopProp {
-  open: boolean;
-  onClose: () => void;
-}
-
-const DrawerFormShop = (props: DrawerFormShopProp) => {
-  const { open, onClose } = props;
-
-  const onToggleDrawer = () => {
-    onClose();
-  };
-
-  return (
-    <Drawer
-      open={open}
-      onClose={onToggleDrawer}
-      title="Create Shop"
-      width="50vw"
-      maskClosable={false}
-      footer={
-        <Flex gap={8} className="flex justify-end py-2">
-          <Button className="min-w-[120px]" onClick={onToggleDrawer}>
-            Close
-          </Button>
-          <Button type="primary" className="min-w-[120px]">
-            Submit
-          </Button>
-        </Flex>
-      }
-    >
-      <Form layout="vertical">
-        <Row>
-          <Col span={24}>
-            <Typography.Text className="font-semibold text-lg">
-              Personal
-            </Typography.Text>
-          </Col>
-          <Col {...colLayout}>
-            <Form.Item label="Shop ID" name="shop_id">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col {...colLayout}>
-            <Form.Item label="Shop Name" name="shop_name">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col {...colLayout}>
-            <Form.Item label="Status" name="status">
-              <Switch />
-            </Form.Item>
-          </Col>
-          <Col {...colLayout}>
-            <Form.Item label="Remark" name="remark">
-              <Input.TextArea autoSize={{ minRows: 5 }} />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <Typography.Text className="font-semibold text-lg">
-              Address
-            </Typography.Text>
-          </Col>
-          <Col {...colLayout}>
-            <Form.Item label="Address" name="address">
-              <Select />
-            </Form.Item>
-          </Col>
-          <Col {...colLayout}>
-            <Form.Item label="Address" name="address">
-              <Select />
-            </Form.Item>
-          </Col>
-          <Col {...colLayout}>
-            <Form.Item label="Address" name="address">
-              <Select />
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
-    </Drawer>
-  );
-};
+const data = [
+  {
+    shop_id: "1",
+    shop_name: "aa",
+    status: true,
+    remark: "",
+    province: "",
+    district: "",
+    subdistrict: "",
+    post_code: "",
+    latitude: "",
+    longitude: "",
+  },
+  {
+    shop_id: "2",
+    shop_name: "",
+    status: true,
+    remark: "",
+    province: "",
+    district: "",
+    subdistrict: "",
+    post_code: "",
+    latitude: "",
+    longitude: "",
+  },
+];
 
 const Page = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [search, setSearch] = useState<string>();
   const [open, setOpen] = useState(false);
+  const [dataInfo, setDataInfo] = useState<IShopData | undefined>();
 
   const filterDataList = useMemo(() => {
-    return [];
-  }, []);
+    if (data == null) return [];
+
+    if (search != null) {
+      const searchLower = search?.toLowerCase();
+
+      return data?.filter(
+        (e) =>
+          e?.shop_id?.toLowerCase()?.includes(searchLower) ||
+          e?.shop_name?.toLowerCase()?.includes(searchLower)
+      );
+    }
+    return data;
+  }, [data, search]);
 
   const handleToggleModal = () => {
     setOpen(!open);
   };
 
-  const columns: ColumnsType = [
+  const onEdit = (rc: IShopData) => {
+    setDataInfo(rc);
+    handleToggleModal();
+  };
+
+  const onDelete = (rc: IShopData) => {
+    //
+  };
+
+  useEffect(() => {
+    if (open === false) {
+      setDataInfo(undefined);
+    }
+  }, [open]);
+
+  const columns: ColumnsType<IShopData> = [
     {
       key: "shop_id",
       title: "Shop ID",
+      align: "center",
+      width: 180,
       render: (_, rc) => {
-        return <></>;
+        return <Typography.Text>{rc?.shop_id || ""}</Typography.Text>;
       },
     },
     {
       key: "shop_name",
       title: "Shop Name",
       render: (_, rc) => {
-        return <></>;
+        return <Typography.Text>{rc?.shop_name || ""}</Typography.Text>;
       },
     },
     {
       key: "status",
       title: "Status",
       align: "center",
+      width: 150,
       render: (_, rc) => {
-        return <></>;
+        const status = rc?.status === true ? "active" : "inactive";
+        return <TagsStatus status={status} />;
       },
     },
     {
@@ -154,7 +120,13 @@ const Page = () => {
       align: "center",
       fixed: "right",
       render: (_, rc) => {
-        return <></>;
+        return (
+          <Button
+            type="text"
+            icon={<EditOutlined />}
+            onClick={() => onEdit(rc)}
+          />
+        );
       },
     },
     {
@@ -164,7 +136,16 @@ const Page = () => {
       align: "center",
       fixed: "right",
       render: (_, rc) => {
-        return <></>;
+        return (
+          <Popconfirm
+            title="Are you sure?"
+            description="This action cannot be undone"
+            placement="bottomLeft"
+            onConfirm={() => onDelete(rc)}
+          >
+            <Button danger type="text" icon={<DeleteOutlined />} />
+          </Popconfirm>
+        );
       },
     },
   ];
@@ -200,6 +181,7 @@ const Page = () => {
             columns={columns}
             dataSource={filterDataList || []}
             scroll={{ x: "max-content" }}
+            size="small"
             pagination={{
               size: "small",
               showSizeChanger: true,
@@ -207,7 +189,7 @@ const Page = () => {
           />
         </Col>
       </Row>
-      <DrawerFormShop open={open} onClose={handleToggleModal} />
+      <DrawerFormShop data={dataInfo} open={open} onClose={handleToggleModal} />
     </CustomCard>
   );
 };
