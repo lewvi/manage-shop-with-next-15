@@ -7,6 +7,6 @@ interface IShopData {
   district: string;
   subdistrict: string;
   post_code: string;
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number
 }

@@ -17,33 +17,7 @@ import {
 } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useMemo, useState } from "react";
-
-const data = [
-  {
-    shop_id: "1",
-    shop_name: "aa",
-    status: true,
-    remark: "",
-    province: "",
-    district: "",
-    subdistrict: "",
-    post_code: "",
-    latitude: "",
-    longitude: "",
-  },
-  {
-    shop_id: "2",
-    shop_name: "",
-    status: true,
-    remark: "",
-    province: "",
-    district: "",
-    subdistrict: "",
-    post_code: "",
-    latitude: "",
-    longitude: "",
-  },
-];
+import MOCK_SHOP_LIST from "../../mock/shop-list.json";
 
 const Page = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -53,19 +27,19 @@ const Page = () => {
   const [dataInfo, setDataInfo] = useState<IShopData | undefined>();
 
   const filterDataList = useMemo(() => {
-    if (data == null) return [];
+    if (MOCK_SHOP_LIST?.result == null) return [];
 
     if (search != null) {
       const searchLower = search?.toLowerCase();
 
-      return data?.filter(
+      return MOCK_SHOP_LIST?.result?.filter(
         (e) =>
           e?.shop_id?.toLowerCase()?.includes(searchLower) ||
           e?.shop_name?.toLowerCase()?.includes(searchLower)
       );
     }
-    return data;
-  }, [data, search]);
+    return MOCK_SHOP_LIST?.result;
+  }, [search]);
 
   const handleToggleModal = () => {
     setOpen(!open);

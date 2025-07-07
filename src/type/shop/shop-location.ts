@@ -1,8 +1,12 @@
 interface IShopLocationData {
   shop_id: string;
   shop_name: string;
-  shop_status: boolean;
-  // location: [0, 0],
-  // address: {},
-  // opening: {},
+  status: boolean;
+  remark: string;
+  province: string;
+  district: string;
+  subdistrict: string;
+  post_code: string;
+  latitude: number;
+  longitude: number;
 }

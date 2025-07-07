@@ -1,0 +1,124 @@
+{
+  "result": [
+    {
+      "shop_id": "1",
+      "shop_name": "Sugar & Cloud",
+      "status": true,
+      "remark": "",
+      "province": "กรุงเทพมหานคร",
+      "district": "ปทุมวัน",
+      "subdistrict": "ลุมพินี",
+      "post_code": "10330",
+      "latitude": 13.7394,
+      "longitude": 100.54
+    },
+    {
+      "shop_id": "2",
+      "shop_name": "Mochi Mood",
+      "status": false,
+      "remark": "Under renovation",
+      "province": "เชียงใหม่",
+      "district": "เมืองเชียงใหม่",
+      "subdistrict": "สุเทพ",
+      "post_code": "50200",
+      "latitude": 18.7965,
+      "longitude": 98.9609
+    },
+    {
+      "shop_id": "3",
+      "shop_name": "Fluffy Bunny",
+      "status": true,
+      "remark": "",
+      "province": "สงขลา",
+      "district": "หาดใหญ่",
+      "subdistrict": "หาดใหญ่",
+      "post_code": "90110",
+      "latitude": 7.0084,
+      "longitude": 100.4747
+    },
+    {
+      "shop_id": "4",
+      "shop_name": "Blooming Room",
+      "status": true,
+      "remark": "Popular with tourists",
+      "province": "ภูเก็ต",
+      "district": "เมืองภูเก็ต",
+      "subdistrict": "ตลาดใหญ่",
+      "post_code": "83000",
+      "latitude": 7.8804,
+      "longitude": 98.3923
+    },
+    {
+      "shop_id": "5",
+      "shop_name": "Tiny Spoon",
+      "status": false,
+      "remark": "",
+      "province": "ขอนแก่น",
+      "district": "เมืองขอนแก่น",
+      "subdistrict": "ในเมือง",
+      "post_code": "40000",
+      "latitude": 16.4322,
+      "longitude": 102.8236
+    },
+    {
+      "shop_id": "6",
+      "shop_name": "Quiet Corner",
+      "status": true,
+      "remark": "",
+      "province": "อุดรธานี",
+      "district": "เมืองอุดรธานี",
+      "subdistrict": "หมากแข้ง",
+      "post_code": "41000",
+      "latitude": 17.415,
+      "longitude": 102.7859
+    },
+    {
+      "shop_id": "7",
+      "shop_name": "Berry Bright",
+      "status": true,
+      "remark": "",
+      "province": "ระยอง",
+      "district": "เมืองระยอง",
+      "subdistrict": "ท่าประดู่",
+      "post_code": "21000",
+      "latitude": 12.6814,
+      "longitude": 101.2771
+    },
+    {
+      "shop_id": "8",
+      "shop_name": "Jai Dee Studio",
+      "status": false,
+      "remark": "Closed temporarily",
+      "province": "พระนครศรีอยุธยา",
+      "district": "พระนครศรีอยุธยา",
+      "subdistrict": "หัวรอ",
+      "post_code": "13000",
+      "latitude": 14.355,
+      "longitude": 100.568
+    },
+    {
+      "shop_id": "9",
+      "shop_name": "Nest & Nook",
+      "status": true,
+      "remark": "",
+      "province": "เลย",
+      "district": "เมืองเลย",
+      "subdistrict": "กุดป่อง",
+      "post_code": "42000",
+      "latitude": 17.4905,
+      "longitude": 101.7275
+    },
+    {
+      "shop_id": "10",
+      "shop_name": "The Morning Lab",
+      "status": true,
+      "remark": "Open weekends only",
+      "province": "สุโขทัย",
+      "district": "เมืองสุโขทัย",
+      "subdistrict": "ธานี",
+      "post_code": "64000",
+      "latitude": 17.0095,
+      "longitude": 99.8202
+    }
+  ]
+}

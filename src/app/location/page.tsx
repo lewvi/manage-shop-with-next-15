@@ -2,28 +2,15 @@
 
 import MapView from "@/components/Common/Map/MapView";
 import CardShopList from "@/components/Location/CardShopList";
-import React, { useState } from "react";
-
-const shopList = [
-  {
-    shop_id: "shop_001",
-    shop_name: "Shop Name 001",
-    shop_status: true,
-  },
-  {
-    shop_id: "shop_002",
-    shop_name: "Shop Name 002",
-    shop_status: true,
-  },
-  {
-    shop_id: "shop_003",
-    shop_name: "Shop Name 003",
-    shop_status: false,
-  },
-];
+import React, { useMemo, useState } from "react";
+import MOCK_SHOP_LIST from "../../mock/shop-list.json";
 
 const Page = () => {
   const [shopData, setShopData] = useState<IShopLocationData>();
+
+  const shopList = useMemo(() => {
+    return MOCK_SHOP_LIST?.result;
+  }, []);
 
   const onSelectShopCard = (val: IShopLocationData) => {
     setShopData(val);

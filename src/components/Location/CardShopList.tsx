@@ -1,18 +1,7 @@
-import {
-  Avatar,
-  Card,
-  Col,
-  Empty,
-  Flex,
-  Input,
-  Row,
-  Tag,
-  Typography,
-} from "antd";
+import { Avatar, Card, Col, Empty, Flex, Input, Row, Typography } from "antd";
 import { MapPin } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
-import TagsStatus from "../Common/Tags/TagsStatus";
 
 const CardStyle = styled(Card)`
   min-width: 100px;
@@ -67,7 +56,7 @@ const CardShopItem = (props: CardShopItemProps) => {
     >
       <Row>
         <Col span={5} className="flex items-center">
-          <ShopIcon status={item?.shop_status} />
+          <ShopIcon status={item?.status} />
         </Col>
         <Col span={13}>
           <Flex vertical gap={6}>
