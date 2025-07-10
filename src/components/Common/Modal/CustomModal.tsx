@@ -51,18 +51,18 @@ const StyleModal = styled(Modal)<{ $righted: boolean; $theme: themeBgType }>`
   > .ant-modal-body {
     overflow-x: hidden;
     overflow-y: auto;
-    max-height: calc(100vh - 12rem);
+    max-height: calc(100vh - 300px);
   }
 `;
 
 interface CustomModalProps extends ModalProps {
-  width?: { xl: string; lg: string; md: string; screen?: string };
+  width?: { xl?: string; lg?: string; md?: string; screen?: string };
   centered?: boolean;
   righted?: boolean;
   theme?: themeBgType;
 }
 
-const defaultWidth = { xl: "35vw", lg: "70vw", md: "75vw", screen: "95vw" };
+const defaultWidth = { xl: "40vw", lg: "70vw", md: "75vw", screen: "95vw" };
 
 const CustomModal = (props: CustomModalProps) => {
   const {

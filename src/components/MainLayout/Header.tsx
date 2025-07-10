@@ -20,7 +20,7 @@ const Header = ({ title, onToggleMenu }: HeaderProps) => {
             <Button
               shape="circle"
               size="large"
-              className="mr-2"
+              className="mr-5"
               icon={<MenuOutlined />}
               onClick={onToggleMenu}
             />

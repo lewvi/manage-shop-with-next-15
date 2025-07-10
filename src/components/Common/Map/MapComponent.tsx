@@ -41,6 +41,7 @@ interface IMaps {
   zoom?: number;
   minZoom?: number;
   maxZoon?: number;
+  height?: string | number;
   onViewChange?: (e: any) => void;
 }
 
@@ -186,7 +187,7 @@ const MarkerStatus = (color?: string, signal?: string) => {
           >
             <path
               d="M0 22.533C0.00281474 16.5553 2.42738 10.8235 6.74051 6.5979C11.0536 2.37235 16.9022 -0.000920153 23 2.67624e-07C35.6995 2.67624e-07 46 10.0906 46 22.533C46 31.8084 41.2655 39.1587 36.1914 44.1259C33.9483 46.3343 31.4345 48.2615 28.7075 49.8633C27.5682 50.5223 26.5031 51.0426 25.576 51.3964C24.702 51.7364 23.7855 52 23 52C22.2145 52 21.298 51.7364 20.424 51.3964C19.3417 50.9647 18.2948 50.4521 17.2925 49.8633C14.5655 48.2614 12.0517 46.3343 9.80862 44.1259C4.73446 39.1587 0 31.8084 0 22.533Z"
-              fill={color ?? "#4CAAE8"}
+              fill={color ?? "#292929"}
             />
           </svg>
           <div
@@ -199,7 +200,7 @@ const MarkerStatus = (color?: string, signal?: string) => {
             >
               <div className="absolute" style={{ top: "5px", left: "5px" }}>
                 <ShopOutlined
-                  style={{ fontSize: "18px", color: color ?? "#4CAAE8" }}
+                  style={{ fontSize: "18px", color: color ?? "#292929" }}
                 />
               </div>
             </div>
@@ -239,6 +240,7 @@ const MapComponent = (props: IMaps) => {
     maxZoon,
     onViewChange,
     viewMap,
+    height,
   } = props;
 
   return (
@@ -249,7 +251,7 @@ const MapComponent = (props: IMaps) => {
       maxZoom={maxZoon ?? 18}
       zoomControl={zoomControl ?? false}
       scrollWheelZoom={scrollWheelZoom ?? true}
-      style={{ height: "100vh", width: "100%" }}
+      style={{ height: height || "100vh", width: "100%" }}
       dragging={true}
       doubleClickZoom={true}
     >
