@@ -70,7 +70,7 @@ const CustomModal = (props: CustomModalProps) => {
     maskClosable = false,
     centered = true,
     righted = false,
-    theme = "glass",
+    theme = "white",
   } = props;
 
   const { md, lg, xl } = Grid.useBreakpoint();

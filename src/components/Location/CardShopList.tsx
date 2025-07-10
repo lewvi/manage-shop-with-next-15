@@ -1,11 +1,27 @@
-import { Avatar, Card, Col, Empty, Flex, Input, Row, Typography } from "antd";
+import {
+  Avatar,
+  Card,
+  Col,
+  Empty,
+  Flex,
+  Input,
+  Row,
+  Tag,
+  Typography,
+} from "antd";
 import { MapPin } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
-const CardStyle = styled(Card)`
-  min-width: 100px;
-  max-width: 400px;
+const CardWrapper = styled.div`
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 500;
+  height: calc(100vh - 180px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: calc(100vw - 5rem);
 
   background: rgba(246, 244, 244, 0.49);
   border-radius: 16px;
@@ -98,12 +114,15 @@ const CardShopList = (props: CardShopListProps) => {
   }, [data, search]);
 
   return (
-    <CardStyle className="h-[calc(100vh-200px)] rounded-xl">
+    <CardWrapper className="p-5 w-96">
       <Row gutter={[12, 12]}>
-        <Col span={24}>
-          <Typography.Text ellipsis className="text-base font-semibold mr-2">
+        <Col span={12}>
+          <Typography.Text className="text-base font-semibold">
             Shop Location List
           </Typography.Text>
+        </Col>
+        <Col span={12} className="flex justify-end items-center">
+          <Tag color="red">{`Total : ${data?.length ?? 0} Items`}</Tag>
         </Col>
         <Col span={24}>
           <Input
@@ -115,7 +134,7 @@ const CardShopList = (props: CardShopListProps) => {
         </Col>
         <Col span={24}>
           {filterShopList?.length !== 0 ? (
-            <div className="h-[calc(100vh-330px)] overflow-x-hidden overflow-y-auto px-3">
+            <div className="h-[calc(100vh-310px)] overflow-x-hidden overflow-y-auto px-2">
               {filterShopList?.map((item) => {
                 return (
                   <CardShopItem
@@ -127,13 +146,13 @@ const CardShopList = (props: CardShopListProps) => {
               })}
             </div>
           ) : (
-            <div className="h-[500px] flex items-center justify-center p-5">
+            <div className="flex items-center justify-center p-5">
               <Empty />
             </div>
           )}
         </Col>
       </Row>
-    </CardStyle>
+    </CardWrapper>
   );
 };
 
