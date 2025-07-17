@@ -37,12 +37,14 @@ interface ISideBarMobile extends ISideBarContent {
 const SideBarMobile = (props: ISideBarMobile) => {
   const { open, onClose, listMenu, selectedKey } = props;
 
+  const { md } = Grid.useBreakpoint();
+
   return (
     <Drawer
       open={open}
       onClose={onClose}
       placement="left"
-      width="80vw"
+      width={md ? "40vw" : "80vw"}
       closable={false}
     >
       <div>

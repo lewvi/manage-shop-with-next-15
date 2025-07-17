@@ -91,7 +91,7 @@ const ModalFormProduct = (props: IModalFormProduct) => {
       open={open}
       onCancel={onCloseModal}
       onOk={onSubmit}
-      righted
+      // righted
       title={data == null ? "Create Product" : "Update Product"}
     >
       {contextHolder}

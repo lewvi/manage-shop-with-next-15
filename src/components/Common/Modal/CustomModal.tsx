@@ -62,7 +62,7 @@ interface CustomModalProps extends ModalProps {
   theme?: themeBgType;
 }
 
-const defaultWidth = { xl: "40vw", lg: "70vw", md: "75vw", screen: "95vw" };
+const defaultWidth = { xl: "60vw", lg: "70vw", md: "75vw", screen: "95vw" };
 
 const CustomModal = (props: CustomModalProps) => {
   const {
